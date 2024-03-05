@@ -17,6 +17,13 @@ int bpow(int x, int p){
 	return res;
 }
 
+int nCr(int n, int k){
+    if (k > n){
+        return 0;
+    }
+    return fact[n] * 1ll * inv_fact[n - k] % MOD * 1ll * inv_fact[k] % MOD;
+}
+
 void solve(){
 	fact[0] = 1;
 	for (int i = 1; i < SZ; i++){
