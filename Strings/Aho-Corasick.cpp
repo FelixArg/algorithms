@@ -6,7 +6,6 @@ struct Aho_Corasick{
         Node* link = nullptr;
         char pred_ch;
         Node* pred = nullptr;
-        bool vis = 0;
         Node(char _pred_ch, Node* _pred): pred_ch(_pred_ch), pred(_pred){
             memset(to, 0, sizeof(to));
             memset(go, 0, sizeof(go));
@@ -14,7 +13,7 @@ struct Aho_Corasick{
     };
 
     Node* root = nullptr;
-    void add(const string& s){
+    void add(const string& s, int val){
         Node* cur = root;
         for (char ch : s){
             if (!cur->to[ch - 'a']){
@@ -64,13 +63,26 @@ struct Aho_Corasick{
         return v->go[ch - 'a'];
     }
 
-    void dfs(Node* v){
-        if (v->vis){
+    void bfs(){
+        if (root == nullptr){
             return;
         }
-        v->vis = 1;
-        dfs(link(v));
+        vector<Node*> q;
+        q.push_back(root);
+        for (int i = 0; i < q.size(); i++){
+            for (int j = 0; j < al; j++){
+                if (q[i]->to[j]){
+                    q.push_back(q[i]->to[j]);
+                }
+            }
+        }
+        for (int i = 0; i < q.size(); i++){
+            if (q[i] != nullptr){
+                delete q[i];
+            }
+        }
     }
 
     Aho_Corasick(): root(new Node(0, nullptr)){}
+    ~Aho_Corasick(){ bfs();};
 };
